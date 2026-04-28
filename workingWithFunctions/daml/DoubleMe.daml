@@ -1,0 +1,18 @@
+module DoubleMe where
+
+import Daml.Script
+
+doubleMe : Int -> Int
+doubleMe x = x * 2
+
+doubleUs : Int -> Int -> Int
+doubleUs x y = doubleMe x + doubleMe y
+
+testDoubleMe : Script ()
+testDoubleMe = script do
+  debug $ doubleMe 3
+  debug $ doubleUs 3 4
+
+testDoubleUsInfix : Script ()
+testDoubleUsInfix = script do
+  debug $ 3 `doubleUs` 4
