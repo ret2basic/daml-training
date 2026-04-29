@@ -1,0 +1,14 @@
+module TermFrequency where
+
+import Daml.Script
+import DA.Text (words)
+
+termFrequency : Text -> Text -> Decimal
+termFrequency word text =
+  let allWords = words text
+      matchingWords = filter (\currentWord -> currentWord == word) allWords
+  in intToDecimal (length matchingWords) / intToDecimal (length allWords)
+
+testTermFrequency : Script ()
+testTermFrequency = script do
+  debug $ termFrequency "long" "a long long way to run"
