@@ -1,0 +1,30 @@
+module TriangleArea where
+
+import DA.Math (sqrt)
+import Daml.Script
+
+calculateTriangleArea : Decimal -> Decimal -> Decimal -> Decimal
+calculateTriangleArea a b c = sqrt (s * (s - a) * (s - b) * (s - c))
+  where
+    s = (a + b + c) / 2.0
+
+triangleArea : [Decimal] -> Either Text Decimal
+triangleArea sides =
+  case sides of
+    [a, b, c] ->
+      if a == 0.0 || b == 0.0 || c == 0.0 then
+        Left "Error: Side of a triangle cannot be 0.0"
+      else if a + b <= c || a + c <= b || b + c <= a then
+        Left "Error: This can't be a triangle as sum of any two sides must be greater than the third"
+      else
+        Right $ calculateTriangleArea a b c
+    _ -> Left "Error: Triangle has 3 sides"
+
+testTriangle : Script ()
+testTriangle = script do
+  debug $ triangleArea [4.0, 2.0, 5.0]
+  debug $ triangleArea [1.0, 2.0, 3.0]
+  debug $ triangleArea [1.0, 2.0]
+  debug $ triangleArea [1.0, 2.0, 0.0]
+
+  return ()
