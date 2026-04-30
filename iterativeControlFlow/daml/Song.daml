@@ -1,0 +1,19 @@
+module Song where
+
+import Daml.Script
+
+song : [(Text, Text)]
+song =
+  [ ("do", "a deer, a female deer")
+  , ("re", "a drop of golden sun")
+  , ("mi", "a name, I call myself")
+  , ("fa", "a long long way to run")
+  ]
+
+testSong : Script ()
+testSong = script do
+  let notes = map fst song
+  let meanings = map snd song
+
+  debug notes
+  debug meanings

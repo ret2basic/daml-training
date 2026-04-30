@@ -1,0 +1,32 @@
+module MultiTermFrequency where
+
+import Daml.Script
+import DA.Text (words)
+
+termFrequency : Text -> Text -> Decimal
+termFrequency term text =
+  let allWords = words text
+      matchingWords = filter (\word -> word == term) allWords
+  in intToDecimal (length matchingWords) / intToDecimal (length allWords)
+
+multiTermFrequency : Text -> [Text] -> [Decimal]
+multiTermFrequency term texts =
+  map (termFrequency term) texts
+
+multiTermFrequencyFoldr : Text -> [Text] -> [Decimal]
+multiTermFrequencyFoldr term texts =
+  foldr (\text frequencies -> termFrequency term text :: frequencies) [] texts
+
+testMultiTermFrequency : Script ()
+testMultiTermFrequency = script do
+  let x = "hello"
+  let y =
+        [ "hello from the other side I must have called a thousand times"
+        , "You say goodbye and I say hello hello hello"
+        , "hello is it me you're looking for"
+        , "hello hello is anyone home"
+        ]
+
+  debug $ multiTermFrequency x y
+  debug $ multiTermFrequencyFoldr x y
+  return ()
