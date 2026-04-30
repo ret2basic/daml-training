@@ -1,0 +1,35 @@
+module AirtravelPoint where
+
+import Daml.Script
+
+data AirtravelPoint = AirtravelPoint with
+    count : Int
+  deriving (Eq, Show)
+
+data DiningPoint = DiningPoint with
+    count : Int
+  deriving (Eq, Show)
+
+class Redeemable a where
+  redeem : a -> Decimal
+
+instance Redeemable AirtravelPoint where
+  redeem point = intToDecimal point.count * 10.0
+
+instance Redeemable DiningPoint where
+  redeem point = intToDecimal point.count * 5.0
+
+testRedeemable : Script ()
+testRedeemable = script do
+  let myTravelPoints = AirtravelPoint with
+        count = 500
+
+      myDiningPoints = DiningPoint with
+        count = 5000
+
+      myTotalRedeemedPoints : Decimal =
+        redeem myTravelPoints + redeem myDiningPoints
+
+  debug myTotalRedeemedPoints
+
+  return ()
